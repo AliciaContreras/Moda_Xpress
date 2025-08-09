@@ -16,6 +16,11 @@ def find_product_by_name():
                 break
         if product_found:
             print(f"\n Producto '{product_found.name}' encontrado:\n")
+            product_found.display_details()
+        else:
+            print("Producto no encontrado")
+    except ValueError as e:
+        print(f"\n Error al buscar el producto: {str(e)}")
 
 if __name__=="__main__":
     find_product_by_name()
