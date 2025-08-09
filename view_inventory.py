@@ -15,8 +15,6 @@ def view_all_products():
         print(f"Error de E/S al acceder al archivo de inventario: {str(e)}")
     except ValueError as e:
         print(f"Error en el formato de los datos del inventario: {str(e)}")
-    except UnicodeDecodeError:
-        print("Error: El archivo de inventario tiene un formato de codificación incorrecto")
-
+        
 if __name__=="__main__":
     view_all_products()
