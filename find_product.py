@@ -1,26 +1,33 @@
 from inventory_utils import load_products
 
 def find_product_by_name():
-    print("\n Buscar producto por nombre")
+    print("\nBuscar producto por nombre")
     try:
-        name=input("Nombre: ")
-        products=load_products()
-        if not name:
-            raise ValueError("El nombre no puede estar vacío")
+        search_term = input("Ingrese el nombre o parte del nombre: ").strip().lower()
         
-        products=load_products()
-        product_found=None
+        if not search_term:
+            raise ValueError("Debe ingresar un término de búsqueda")
+        
+        products = load_products()
+        
+        found_products = []
         for product in products:
-            if product.name.lower()==name.lower():
-                product_found=product
-                break
-        if product_found:
-            print(f"\n Producto '{product_found.name}' encontrado:\n")
-            product_found.display_details()
-        else:
-            print("Producto no encontrado")
-    except ValueError as e:
-        print(f"\n Error al buscar el producto: {str(e)}")
+            if search_term in product.name.lower():
+                found_products.append(product)
+        
 
-if __name__=="__main__":
+        if found_products:
+            print(f"\nSe encontraron {len(found_products)} productos que coinciden con '{search_term}':")
+            for i, product in enumerate(found_products, 1):
+                print(f"\nProducto {i}:")
+                product.display_details()
+        else:
+            print(f"\nNo se encontraron productos que coincidan con '{search_term}'")
+            
+    except ValueError as e:
+        print(f"\nError: {str(e)}")
+    except Exception as e:
+        print(f"\nError inesperado al buscar productos: {str(e)}")
+
+if __name__ == "__main__":
     find_product_by_name()
