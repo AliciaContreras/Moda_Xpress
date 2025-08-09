@@ -29,4 +29,5 @@ def main():
         except ValueError:
             print("\nPor favor, ingrese un número válido.")
 
-    
+if __name__=="__main__":
+    main()
