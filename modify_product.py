@@ -42,7 +42,7 @@ def modify_product():
                     found = True
                     break
         if not found:
-            print("Producto "{name}" no encontrado.")
+            print(f"Producto '{name}' no encontrado.")
             return
         
         with open(FILENAME, "w", encoding="utf-8") as file:
