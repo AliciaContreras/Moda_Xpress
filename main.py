@@ -1,13 +1,15 @@
 from add_product import add_new_product
 from find_product import find_product_by_name
 from view_inventory import view_all_products
+from delete_product import delete_product
 
 def display_menu():
     print("\n Sistema de inventario de Moda Xpress")
     print("1. Añadir nuevo producto")
     print("2. Buscar producto por nombre")
     print("3. Ver inventario completo")
-    print("4. Salir")
+    print("4. Eliminar producto")
+    print("5. Salir")
     print("-"*30)
 
 def main():
@@ -22,6 +24,8 @@ def main():
             elif option==3:
                 view_all_products()
             elif option==4:
+                delete_product()
+            elif option==5:
                 print("\nGracias por usar el sistema. Hasta luego.")
                 break
             else:
