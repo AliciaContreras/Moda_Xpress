@@ -1,57 +1,37 @@
-from product import Product
-from inventory_utils import FILENAME
+from inventory_utils import load_products, save_products, find_and_select_product, confirm_action # Importamos
 
 def modify_product():
-    print("\nModificar producto")
-
+    print("\n--- Modificar Producto ---")
     try:
-        name = input("Nombre del producto a modificar: ").strip()
-        if not name:
-            raise ValueError("El nombre del producto es obligatorio")
-        
-        products = []
-        found = False
-        
-        with open(FILENAME, "r", encoding="utf-8") as file:
-            for line in file:
-                parts = line.strip().split(",")
-                if len(parts) < 4:
-                    print("Formato de producto inválido en el archivo.")
-                    continue
-                
-                product_name = parts[0].strip()
-                price = (parts[1].replace(" USD", "").strip())
-                quantity = (parts[2].replace(" unidades", "").strip())
-                size = parts[3].strip()
-                product = Product(product_name, (price), (quantity), size)
-                products.append(product)
-                
-                if product_name.lower() == name.lower():
-                    print(f"Producto encontrado: {product}")
-                    new_price = input("Nuevo precio (dejar en blanco para no cambiar): ").strip()
-                    new_quantity = input("Nueva cantidad (dejar en blanco para no cambiar): ").strip()
-                    new_size = input("Nuevo tamaño (dejar en blanco para no cambiar): ").strip()
-                    
-                    if new_price:
-                        product.price = float(new_price)
-                    if new_quantity:
-                        product.quantity = int(new_quantity)
-                    if new_size:
-                        product.size = new_size
-                    print(f"Producto modificado: {product}")
-                    found = True
-                    break
-        if not found:
-            print(f"Producto '{name}' no encontrado.")
+        products = load_products()
+        if not products:
+            print("El inventario está vacío.")
             return
+
+        product_to_modify = find_and_select_product(products, "modificar")
+
+        if product_to_modify is None:
+            return
+
+        print("\nIngrese los nuevos datos (deje en blanco para no cambiar).")
         
-        with open(FILENAME, "w", encoding="utf-8") as file:
-            for product in products:
-                file.write(f"{product.name}, {product.price} USD, {product.quantity} unidades, {product.size}\n")
-        print("Producto modificado exitosamente.")
-        
-    except ValueError as e:
-        print(f"Error: {e}")
+        new_name = input(f"Nuevo nombre (actual: {product_to_modify.name}): ").strip()
+        new_price = input(f"Nuevo precio (actual: {product_to_modify.price}): ").strip()
+        new_quantity = input(f"Nueva cantidad (actual: {product_to_modify.quantity}): ").strip()
+        new_size = input(f"Nueva talla (actual: {product_to_modify.size}): ").strip()
+
+        if confirm_action("¿Confirma que desea aplicar estos cambios?"):
+            if new_name:
+                product_to_modify.name = new_name
+            if new_price:
+                product_to_modify.price = new_price
+            if new_quantity:
+                product_to_modify.quantity = new_quantity
+            if new_size:
+                product_to_modify.size = new_size
             
-            
-     
+            save_products(products)
+            print("\nProducto actualizado exitosamente.")
+
+    except Exception as e:
+        print(f"\nError inesperado al modificar el producto: {str(e)}")
